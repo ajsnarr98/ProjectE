@@ -3,6 +3,7 @@ package moze_intel.projecte.events;
 import java.util.List;
 import java.util.Optional;
 import moze_intel.projecte.PECore;
+import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.api.capabilities.item.IItemEmcHolder;
 import moze_intel.projecte.config.ProjectEConfig;
@@ -19,6 +20,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -52,11 +54,19 @@ public class ToolTipEvent {
 		if (ProjectEConfig.client.emcToolTips.get() && (!ProjectEConfig.client.shiftEmcToolTips.get() || Screen.hasShiftDown())) {
 			long value = EMCHelper.getEmcValue(current);
 			if (value > 0) {
-				event.getToolTip().add(EMCHelper.getEmcTextComponent(current, 1, clientPlayer));
-				if (current.getCount() > 1) {
-					event.getToolTip().add(EMCHelper.getEmcTextComponent(current, current.getCount(), clientPlayer));
+				Optional<IKnowledgeProvider> optionalKnowledgeProvider;
+				if (clientPlayer != null) {
+					optionalKnowledgeProvider = clientPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY).resolve();
+				} else {
+					optionalKnowledgeProvider = Optional.empty();
 				}
-				if (Screen.hasShiftDown() && clientPlayer != null && clientPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY).map(k -> k.hasKnowledge(current)).orElse(false)) {
+
+				IKnowledgeProvider knowledgeProvider = optionalKnowledgeProvider.orElse(null);
+				event.getToolTip().add(EMCHelper.getEmcTextComponent(current, 1, knowledgeProvider));
+				if (current.getCount() > 1) {
+					event.getToolTip().add(EMCHelper.getEmcTextComponent(current, current.getCount(), knowledgeProvider));
+				}
+				if (Screen.hasShiftDown() && optionalKnowledgeProvider.map(k -> k.hasKnowledge(current)).orElse(false)) {
 					event.getToolTip().add(PELang.EMC_HAS_KNOWLEDGE.translateColored(ChatFormatting.YELLOW));
 				}
 			}

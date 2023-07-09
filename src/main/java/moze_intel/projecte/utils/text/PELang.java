@@ -185,6 +185,14 @@ public enum PELang implements ILangEntry {
 	TRANSMUTATION_UNLEARNED_7("transmutation", "unlearned.7"),
 	TRANSMUTATION_UNLEARNED_8("transmutation", "unlearned.8"),
 	TRANSMUTATION_UNLEARNED_9("transmutation", "unlearned.9"),
+	// Research GUI
+	RESEARCH_RESEARCH_TITLE("research", "research.title"),
+	RESEARCH_RESEARCH_BUTTON("research", "research.button"),
+	RESEARCH_RESEARCH_FRAGMENTS("research", "research.fragments"),
+	RESEARCH_FRACTION("research", "fraction"),
+	RESEARCH_BASE_EMC("research", "emc.base"),
+	RESEARCH_SELL_EMC("research", "emc.sell"),
+	RESEARCH_BUY_EMC("research", "emc.buy"),
 	//Advancements
 	ADVANCEMENTS_PROJECTE_DESCRIPTION("advancements", "description"),
 	ADVANCEMENTS_PHILO_STONE("advancements", "philo_stone"),

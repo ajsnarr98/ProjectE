@@ -120,7 +120,7 @@ public class TransmutationContainer extends PEHandContainer {
 		if (slotIndex >= 11 && slotIndex <= 26) {
 			ItemStack stack = currentSlot.getItem().copy();
 			// Output Slots
-			long itemEmc = EMCHelper.getEmcBuyValue(stack, player);
+			long itemEmc = EMCHelper.getEmcBuyValue(stack, transmutationInventory.provider);
 			//Double-check the item actually has Emc and something didn't just go terribly wrong
 			if (itemEmc > 0) {
 				//Note: We can just set the size here as newStack is a copy stack used for modifications
@@ -168,7 +168,7 @@ public class TransmutationContainer extends PEHandContainer {
 				}
 			}
 			//Else if we failed to do that also, transfer to the learn slot if the item has EMC
-			long emc = EMCHelper.getEmcSellValue(stackToInsert, player);
+			long emc = EMCHelper.getEmcSellValue(stackToInsert, transmutationInventory.provider);
 			if (emc > 0 || stackToInsert.getItem() instanceof Tome) {
 				if (transmutationInventory.isServer()) {
 					BigInteger emcBigInt = BigInteger.valueOf(emc);

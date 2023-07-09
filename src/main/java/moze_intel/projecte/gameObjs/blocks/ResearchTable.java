@@ -1,5 +1,6 @@
 package moze_intel.projecte.gameObjs.blocks;
 
+import moze_intel.projecte.gameObjs.container.ResearchContainer;
 import moze_intel.projecte.gameObjs.container.TransmutationContainer;
 import moze_intel.projecte.utils.text.PELang;
 import net.minecraft.core.BlockPos;
@@ -75,13 +76,13 @@ public class ResearchTable extends DirectionalBlock {
 
         @Override
         public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory playerInventory, @NotNull Player player) {
-            return new TransmutationContainer(windowId, playerInventory);
+            return new ResearchContainer(windowId, playerInventory);
         }
 
         @NotNull
         @Override
         public Component getDisplayName() {
-            return PELang.TRANSMUTATION_TRANSMUTE.translate();
+            return PELang.RESEARCH_RESEARCH_TITLE.translate();
         }
     }
 }

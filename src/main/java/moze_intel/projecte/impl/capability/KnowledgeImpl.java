@@ -226,6 +226,11 @@ public final class KnowledgeImpl {
 		}
 
 		@Override
+		public int getResearchFragments(@NotNull ItemInfo item) {
+			return researchFragments.getOrDefault(NBTManager.getPersistentInfo(item), 0);
+		}
+
+		@Override
 		public boolean setResearchFragments(@NotNull ItemInfo item, int numFragments) {
 			Integer prevValue = researchFragments.put(NBTManager.getPersistentInfo(item), numFragments);
 			if (prevValue == null || prevValue.intValue() == numFragments) {

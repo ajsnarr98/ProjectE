@@ -120,6 +120,12 @@ public interface IKnowledgeProvider extends INBTSerializable<CompoundTag> {
 	Map<ItemInfo, Integer> getResearchFragments();
 
 	/**
+	 * @param item item to get research fragments for (does not have to be in this player's knowledge)
+	 * @return The research fragments for this item, between 0 and [ProjectEConfig.server.difficulty.researchFragmentsPerItem] inclusive.
+	 */
+	int getResearchFragments(@NotNull ItemInfo item);
+
+	/**
 	 * @param item item to set research fragments for (does not have to be in this player's knowledge)
 	 * @param numFragments number of fragments to set for this item
 	 *

@@ -1,11 +1,14 @@
 package moze_intel.projecte.gameObjs.container.slots.transmutation;
 
 import java.math.BigInteger;
+import java.util.Optional;
+
 import moze_intel.projecte.gameObjs.container.inventory.TransmutationInventory;
 import moze_intel.projecte.gameObjs.container.slots.InventoryContainerSlot;
 import moze_intel.projecte.gameObjs.items.Tome;
 import moze_intel.projecte.utils.EMCHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 
 public class SlotConsume extends InventoryContainerSlot {
@@ -21,7 +24,7 @@ public class SlotConsume extends InventoryContainerSlot {
 	public void set(@NotNull ItemStack stack) {
 		if (inv.isServer() && !stack.isEmpty()) {
 			inv.handleKnowledge(stack);
-			inv.addEmc(BigInteger.valueOf(EMCHelper.getEmcSellValue(stack, inv.player)).multiply(BigInteger.valueOf(stack.getCount())));
+			inv.addEmc(BigInteger.valueOf(EMCHelper.getEmcSellValue(stack, inv.provider)).multiply(BigInteger.valueOf(stack.getCount())));
 			this.setChanged();
 		}
 	}

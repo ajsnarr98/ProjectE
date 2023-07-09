@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import moze_intel.projecte.api.ItemInfo;
+import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.api.capabilities.block_entity.IEmcStorage.EmcAction;
 import moze_intel.projecte.api.capabilities.item.IItemEmcHolder;
@@ -20,6 +21,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
@@ -152,40 +154,40 @@ public final class EMCHelper {
 		return NBTManager.getEmcValue(info);
 	}
 
-	private static double getEmcBuyMultiplier(ItemInfo info, @Nullable Player player) {
+	private static double getEmcBuyMultiplier(ItemInfo info, @Nullable IKnowledgeProvider provider) {
 		return ProjectEConfig.server.difficulty.maxCreationCostMultiplier.get();
 	}
 
-	private static double getEmcSellMultiplier(ItemInfo info, @Nullable Player player) {
+	private static double getEmcSellMultiplier(ItemInfo info, @Nullable IKnowledgeProvider provider) {
 		return ProjectEConfig.server.difficulty.minBurnEfficiency.get();
 	}
 
 	@Range(from = 0, to = Long.MAX_VALUE)
-	public static long getEmcBuyValue(ItemStack stack, @Nullable Player player) {
-		return getEmcBuyValue(ItemInfo.fromStack(stack), player);
+	public static long getEmcBuyValue(ItemStack stack, @Nullable IKnowledgeProvider provider) {
+		return getEmcBuyValue(ItemInfo.fromStack(stack), provider);
 	}
 
 	@Range(from = 0, to = Long.MAX_VALUE)
-	public static long getEmcBuyValue(ItemInfo info, @Nullable Player player) {
+	public static long getEmcBuyValue(ItemInfo info, @Nullable IKnowledgeProvider provider) {
 		long originalValue = getEmcValue(info);
 		if (originalValue == 0) {
 			return 0;
 		}
-		return (long) Math.floor(originalValue * getEmcBuyMultiplier(info, player));
+		return (long) Math.floor(originalValue * getEmcBuyMultiplier(info, provider));
 	}
 
 	@Range(from = 0, to = Long.MAX_VALUE)
-	public static long getEmcSellValue(ItemStack stack, @Nullable Player player) {
-		return stack.isEmpty() ? 0 : getEmcSellValue(ItemInfo.fromStack(stack), player);
+	public static long getEmcSellValue(ItemStack stack, @Nullable IKnowledgeProvider provider) {
+		return stack.isEmpty() ? 0 : getEmcSellValue(ItemInfo.fromStack(stack), provider);
 	}
 
 	@Range(from = 0, to = Long.MAX_VALUE)
-	public static long getEmcSellValue(ItemInfo info, @Nullable Player player) {
+	public static long getEmcSellValue(ItemInfo info, @Nullable IKnowledgeProvider provider) {
 		long originalValue = getEmcValue(info);
 		if (originalValue == 0) {
 			return 0;
 		}
-		long emc = (long) Math.floor(originalValue * getEmcSellMultiplier(info, player));
+		long emc = (long) Math.floor(originalValue * getEmcSellMultiplier(info, provider));
 		if (emc < 1) {
 			if (ProjectEConfig.server.difficulty.burnCostRounding.get()) {
 				emc = 1;
@@ -196,18 +198,18 @@ public final class EMCHelper {
 		return emc;
 	}
 
-	public static Component getEmcTextComponent(ItemLike item, int stackSize, @Nullable Player player) {
-		return getEmcTextComponent(ItemInfo.fromItem(item), stackSize, player);
+	public static Component getEmcTextComponent(ItemLike item, int stackSize, @Nullable IKnowledgeProvider provider) {
+		return getEmcTextComponent(ItemInfo.fromItem(item), stackSize, provider);
 	}
 
-	public static Component getEmcTextComponent(ItemStack item, int stackSizeUsed, @Nullable Player player) {
-		return getEmcTextComponent(ItemInfo.fromStack(item), stackSizeUsed, player);
+	public static Component getEmcTextComponent(ItemStack item, int stackSizeUsed, @Nullable IKnowledgeProvider provider) {
+		return getEmcTextComponent(ItemInfo.fromStack(item), stackSizeUsed, provider);
 	}
 
-	public static Component getEmcTextComponent(ItemInfo info, int stackSize, @Nullable Player player) {
+	public static Component getEmcTextComponent(ItemInfo info, int stackSize, @Nullable IKnowledgeProvider provider) {
 		long emc = getEmcValue(info);
 
-		boolean showExtraBuyAndSellInfo = player != null;
+		boolean showExtraBuyAndSellInfo = provider != null;
 		if (!showExtraBuyAndSellInfo) {
 			ILangEntry prefix;
 			String value;
@@ -221,8 +223,8 @@ public final class EMCHelper {
 			return prefix.translateColored(ChatFormatting.YELLOW, ChatFormatting.WHITE, value);
 		}
 
-		long emcSellValue = getEmcSellValue(info, player);
-		long emcBuyValue = getEmcBuyValue(info, player);
+		long emcSellValue = getEmcSellValue(info, provider);
+		long emcBuyValue = getEmcBuyValue(info, provider);
 		ILangEntry prefix;
 		String value;
 		String sell;

@@ -3,6 +3,7 @@ package moze_intel.projecte.network.packets.to_client.knowledge;
 import moze_intel.projecte.PECore;
 import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.PECapabilities;
+import moze_intel.projecte.gameObjs.container.ResearchContainer;
 import moze_intel.projecte.gameObjs.container.TransmutationContainer;
 import moze_intel.projecte.network.packets.IPEPacket;
 import net.minecraft.client.Minecraft;
@@ -17,8 +18,11 @@ public record KnowledgeSyncResearchChangePKT(ItemInfo change, int numFragments) 
 		LocalPlayer player = Minecraft.getInstance().player;
 		if (player != null) {
 			player.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY).ifPresent(cap -> {
-				if (cap.setResearchFragments(change, numFragments) && player.containerMenu instanceof TransmutationContainer container) {
+				boolean researchFragmentsChanged = cap.setResearchFragments(change, numFragments);
+				if (researchFragmentsChanged && player.containerMenu instanceof TransmutationContainer container) {
 					container.transmutationInventory.itemResearchUpdated();
+				} else if (researchFragmentsChanged && player.containerMenu instanceof ResearchContainer container) {
+					container.researchInventory.itemResearchUpdated();
 				}
 			});
 		}

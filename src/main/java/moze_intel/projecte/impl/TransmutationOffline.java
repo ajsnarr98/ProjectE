@@ -141,6 +141,11 @@ public class TransmutationOffline {
 			public Map<ItemInfo, Integer> getResearchFragments() { return immutableResearchFragments; }
 
 			@Override
+			public int getResearchFragments(@NotNull ItemInfo item) {
+				return toCopy.getResearchFragments(item);
+			}
+
+			@Override
 			public boolean setResearchFragments(@NotNull ItemInfo item, int numFragments) { return false; }
 
 			@Override

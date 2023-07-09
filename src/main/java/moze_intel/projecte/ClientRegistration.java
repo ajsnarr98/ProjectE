@@ -12,6 +12,7 @@ import moze_intel.projecte.gameObjs.gui.GUIRMFurnace;
 import moze_intel.projecte.gameObjs.gui.GUIRelay.GUIRelayMK1;
 import moze_intel.projecte.gameObjs.gui.GUIRelay.GUIRelayMK2;
 import moze_intel.projecte.gameObjs.gui.GUIRelay.GUIRelayMK3;
+import moze_intel.projecte.gameObjs.gui.GUIResearch;
 import moze_intel.projecte.gameObjs.gui.GUITransmutation;
 import moze_intel.projecte.gameObjs.gui.PEContainerScreen;
 import moze_intel.projecte.gameObjs.registration.impl.ContainerTypeRegistryObject;
@@ -76,6 +77,7 @@ public class ClientRegistration {
 		registerScreen(PEContainerTypes.ALCH_BAG_CONTAINER, AlchBagScreen::new);
 		registerScreen(PEContainerTypes.ETERNAL_DENSITY_CONTAINER, GUIEternalDensity::new);
 		registerScreen(PEContainerTypes.TRANSMUTATION_CONTAINER, GUITransmutation::new);
+		registerScreen(PEContainerTypes.RESEARCH_CONTAINER, GUIResearch::new);
 		registerScreen(PEContainerTypes.RELAY_MK1_CONTAINER, GUIRelayMK1::new);
 		registerScreen(PEContainerTypes.RELAY_MK2_CONTAINER, GUIRelayMK2::new);
 		registerScreen(PEContainerTypes.RELAY_MK3_CONTAINER, GUIRelayMK3::new);

@@ -28,6 +28,7 @@ import moze_intel.projecte.emc.collector.LongToBigFractionCollector;
 import moze_intel.projecte.emc.generator.BigFractionToLongGenerator;
 import moze_intel.projecte.emc.mappers.TagMapper;
 import moze_intel.projecte.emc.pregenerated.PregeneratedEMC;
+import moze_intel.projecte.gameObjs.container.ResearchContainer;
 import moze_intel.projecte.gameObjs.container.TransmutationContainer;
 import moze_intel.projecte.impl.capability.KnowledgeImpl;
 import moze_intel.projecte.network.PacketHandler;

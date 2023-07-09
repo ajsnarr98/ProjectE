@@ -350,5 +350,12 @@
   "transmutation.projecte.unlearned.6": "r",
   "transmutation.projecte.unlearned.7": "n",
   "transmutation.projecte.unlearned.8": "e",
-  "transmutation.projecte.unlearned.9": "d"
+  "transmutation.projecte.unlearned.9": "d",
+  "research.projecte.research.title": "Covalence Research",
+  "research.projecte.research.button": "Consume",
+  "research.projecte.research.fragments": "Knowledge Fragments: %s",
+  "research.projecte.fraction": "%s / %s",
+  "research.projecte.emc.base": "Base EMC: %s",
+  "research.projecte.emc.sell": "Converting item to EMC: %s",
+  "research.projecte.emc.buy": "Converting EMC to item: %s"
 }

@@ -27,7 +27,7 @@ public class SlotOutput extends InventoryContainerSlot {
 	@Override
 	public ItemStack remove(int amount) {
 		ItemStack stack = ItemHelper.size(getItem(), amount);
-		BigInteger emcValue = BigInteger.valueOf(EMCHelper.getEmcBuyValue(stack, inv.player));
+		BigInteger emcValue = BigInteger.valueOf(EMCHelper.getEmcBuyValue(stack, inv.provider));
 		if (amount > 1) {
 			emcValue = emcValue.multiply(BigInteger.valueOf(amount));
 		}
