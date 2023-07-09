@@ -84,6 +84,7 @@ public class PEBlockTagsProvider extends BlockTagsProvider {
 				PEBlocks.DARK_MATTER.getBlock(),
 				PEBlocks.RED_MATTER.getBlock(),
 				PEBlocks.TRANSMUTATION_TABLE.getBlock(),
+				PEBlocks.RESEARCH_TABLE.getBlock(),
 				PEBlocks.RELAY.getBlock(),
 				PEBlocks.RELAY_MK2.getBlock(),
 				PEBlocks.RELAY_MK3.getBlock()

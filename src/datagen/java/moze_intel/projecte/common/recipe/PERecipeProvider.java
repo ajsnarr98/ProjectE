@@ -59,6 +59,7 @@ public class PERecipeProvider extends RecipeProvider {
 		addRelayRecipes(consumer);
 		addCondenserRecipes(consumer);
 		addTransmutationTableRecipes(consumer);
+		addResearchTableRecipes(consumer);
 		addNovaRecipes(consumer);
 		addKleinRecipes(consumer);
 		addRingRecipes(consumer);
@@ -967,6 +968,10 @@ public class PERecipeProvider extends RecipeProvider {
 				.define('T', PEBlocks.TRANSMUTATION_TABLE)
 				.unlockedBy("has_table", has(PEBlocks.TRANSMUTATION_TABLE))
 				.save(consumer);
+	}
+
+	private static void addResearchTableRecipes(Consumer<FinishedRecipe> consumer) {
+		// TODO
 	}
 
 	private static void addNovaRecipes(Consumer<FinishedRecipe> consumer) {

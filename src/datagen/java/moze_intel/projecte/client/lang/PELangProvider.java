@@ -131,7 +131,8 @@ public class PELangProvider extends BaseLanguageProvider {
 	private void addBlocks() {
 		add(PEBlocks.ALCHEMICAL_CHEST, "Alchemical Chest");
 		add(PEBlocks.INTERDICTION_TORCH, "Interdiction Torch");
-		add(PEBlocks.TRANSMUTATION_TABLE, "Transmutation Table");
+		add(PEBlocks.TRANSMUTATION_TABLE, "Covalence Transmutation Table");
+		add(PEBlocks.RESEARCH_TABLE, "Research Table");
 		add(PEBlocks.CONDENSER, "Energy Condenser");
 		add(PEBlocks.CONDENSER_MK2, "Energy Condenser MK2");
 		add(PEBlocks.DARK_MATTER_FURNACE, "Dark Matter Furnace");

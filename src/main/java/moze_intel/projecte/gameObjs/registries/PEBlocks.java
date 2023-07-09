@@ -19,6 +19,7 @@ import moze_intel.projecte.gameObjs.blocks.Pedestal;
 import moze_intel.projecte.gameObjs.blocks.ProjectETNT;
 import moze_intel.projecte.gameObjs.blocks.ProjectETNT.TNTEntityCreator;
 import moze_intel.projecte.gameObjs.blocks.Relay;
+import moze_intel.projecte.gameObjs.blocks.ResearchTable;
 import moze_intel.projecte.gameObjs.blocks.TransmutationStone;
 import moze_intel.projecte.gameObjs.entity.EntityNovaCataclysmPrimed;
 import moze_intel.projecte.gameObjs.entity.EntityNovaCatalystPrimed;
@@ -58,6 +59,7 @@ public class PEBlocks {
 	public static final BlockRegistryObject<ProjectETNT, BlockItem> NOVA_CATALYST = registerExplosive("nova_catalyst", EntityNovaCatalystPrimed::new);
 	public static final BlockRegistryObject<ProjectETNT, BlockItem> NOVA_CATACLYSM = registerExplosive("nova_cataclysm", EntityNovaCataclysmPrimed::new);
 	public static final BlockRegistryObject<TransmutationStone, BlockItem> TRANSMUTATION_TABLE = BLOCKS.register("transmutation_table", () -> new TransmutationStone(BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(10, 30)));
+	public static final BlockRegistryObject<ResearchTable, BlockItem> RESEARCH_TABLE = BLOCKS.register("research_table", () -> new ResearchTable(BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(10, 30)));
 	public static final BlockRegistryObject<Relay, RelayItem> RELAY = registerRelay("relay_mk1", EnumRelayTier.MK1, state -> 7);
 	public static final BlockRegistryObject<Relay, RelayItem> RELAY_MK2 = registerRelay("relay_mk2", EnumRelayTier.MK2, state -> 11);
 	public static final BlockRegistryObject<Relay, RelayItem> RELAY_MK3 = registerRelay("relay_mk3", EnumRelayTier.MK3, state -> 15);

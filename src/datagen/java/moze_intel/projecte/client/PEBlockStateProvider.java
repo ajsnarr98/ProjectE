@@ -38,6 +38,7 @@ public class PEBlockStateProvider extends BlockStateProvider {
 		registerInterdictionTorch();
 		registerPedestal();
 		registerTransmutationTable();
+		registerResearchTable();
 	}
 
 	private void registerChests() {
@@ -144,6 +145,25 @@ public class PEBlockStateProvider extends BlockStateProvider {
 				.face(Direction.EAST).texture("#side").cullface(Direction.EAST).end()
 				.end();
 		directionalBlock(PEBlocks.TRANSMUTATION_TABLE.getBlock(), state -> model, 180, BlockStateProperties.WATERLOGGED);
+	}
+
+	private void registerResearchTable() {
+		ResourceLocation top = modLoc("block/research_table/top");
+		BlockModelBuilder model = models()
+			.withExistingParent(getName(PEBlocks.RESEARCH_TABLE), "block/block")
+			.texture("bottom", modLoc("block/research_table/bottom"))
+			.texture("top", top)
+			.texture("side", modLoc("block/research_table/side"))
+			.texture("particle", top)
+			.element()
+			.face(Direction.DOWN).texture("#bottom").cullface(Direction.DOWN).end()
+			.face(Direction.UP).texture("#top").end()
+			.face(Direction.NORTH).texture("#side").cullface(Direction.NORTH).end()
+			.face(Direction.SOUTH).texture("#side").cullface(Direction.SOUTH).end()
+			.face(Direction.WEST).texture("#side").cullface(Direction.WEST).end()
+			.face(Direction.EAST).texture("#side").cullface(Direction.EAST).end()
+			.end();
+		directionalBlock(PEBlocks.RESEARCH_TABLE.getBlock(), state -> model, 180);
 	}
 
 	private void registerExplosives() {

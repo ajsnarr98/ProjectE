@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "projecte:block/research_table",
+      "x": 180
+    },
+    "facing=up": {
+      "model": "projecte:block/research_table"
+    },
+    "facing=north": {
+      "model": "projecte:block/research_table",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "projecte:block/research_table",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "projecte:block/research_table",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "projecte:block/research_table",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

@@ -40,6 +40,7 @@ public class PEBlockLootTable extends BlockLoot {
 		dropSelf(PEBlocks.RELAY_MK2.getBlock());
 		dropSelf(PEBlocks.RELAY_MK3.getBlock());
 		dropSelf(PEBlocks.TRANSMUTATION_TABLE.getBlock());
+		dropSelf(PEBlocks.RESEARCH_TABLE.getBlock());
 
 		registerCustomTNT(PEBlocks.NOVA_CATACLYSM.getBlock());
 		registerCustomTNT(PEBlocks.NOVA_CATALYST.getBlock());
