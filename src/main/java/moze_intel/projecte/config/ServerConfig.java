@@ -13,7 +13,6 @@ import net.minecraftforge.fml.config.ModConfig;
 public final class ServerConfig extends BasePEConfig {
 
 	private final ForgeConfigSpec configSpec;
-
 	public final Difficulty difficulty;
 	public final Items items;
 	public final Effects effects;
@@ -54,8 +53,17 @@ public final class ServerConfig extends BasePEConfig {
 
 		public final CachedBooleanValue offensiveAbilities;
 		public final CachedFloatValue katarDeathAura;
-		public final CachedDoubleValue covalenceLoss;
-		public final CachedBooleanValue covalenceLossRounding;
+		public final CachedBooleanValue burnCostRounding;
+
+		public final CachedDoubleValue maxCreationCostMultiplier;
+
+		public final CachedDoubleValue minCreationCostMultiplier;
+
+		public final CachedDoubleValue minBurnEfficiency;
+
+		public final CachedDoubleValue maxBurnEfficiency;
+
+		public final CachedIntValue researchFragmentsPerItem;
 
 		private Difficulty(IPEConfig config, ForgeConfigSpec.Builder builder) {
 			builder.push("difficulty");
@@ -65,12 +73,24 @@ public final class ServerConfig extends BasePEConfig {
 			katarDeathAura = CachedFloatValue.wrap(config, builder
 					.comment("Amount of damage Katar 'C' key deals")
 					.defineInRange("katarDeathAura", 1_000F, 0, Integer.MAX_VALUE));
-			covalenceLoss = CachedDoubleValue.wrap(config, builder
-					.comment("Adjusting this ratio changes how much EMC is received when burning a item. For example setting this to 0.5 will return half of the EMC cost.")
-					.defineInRange("covalenceLoss", 1.0, 0.1, 1.0));
-			covalenceLossRounding = CachedBooleanValue.wrap(config, builder
-					.comment("How rounding occurs when Covalence Loss results in a burn value less than 1 EMC. If true the value will be rounded up to 1. If false the value will be rounded down to 0.")
-					.define("covalenceLossRounding", true));
+			minCreationCostMultiplier = CachedDoubleValue.wrap(config, builder
+				.comment("Minimum multiplier to EMC cost when creating items in the transmutation table (can be reached after researching an item)")
+				.defineInRange("minCreationCostMultiplier", 1.2, 1.0, Double.MAX_VALUE));
+			maxCreationCostMultiplier = CachedDoubleValue.wrap(config, builder
+				.comment("Maximum (and starting) multiplier to EMC cost when creating items in the transmutation table (can be reduced closer to minimum after researching an item)")
+				.defineInRange("maxCreationCostMultiplier", 10.0, 1.0, Double.MAX_VALUE));
+			minBurnEfficiency = CachedDoubleValue.wrap(config, builder
+				.comment("Minimum (and starting) percentage of EMC value received when converting an item to EMC (can be increased closer to maximum after researching an item)")
+				.defineInRange("minBurnEfficiency", 0.80, 0.0, 1.0));
+			maxBurnEfficiency = CachedDoubleValue.wrap(config, builder
+				.comment("Maximum percentage of EMC value received when converting an item to EMC (can be reached after researching an item)")
+				.defineInRange("maxBurnEfficiency", 1.0, 0.0, 1.0));
+			burnCostRounding = CachedBooleanValue.wrap(config, builder
+				.comment("How rounding occurs when burn cost results in a burn value less than 1 EMC. If true the value will be rounded up to 1. If false the value will be rounded down to 0.")
+				.define("burnCostRounding", true));
+			researchFragmentsPerItem = CachedIntValue.wrap(config, builder
+				.comment("How many unique research fragments are needed to make EMC transmutation maximally efficient.")
+				.defineInRange("researchFragmentsPerItem", 48, 1, 64));
 			builder.pop();
 		}
 	}

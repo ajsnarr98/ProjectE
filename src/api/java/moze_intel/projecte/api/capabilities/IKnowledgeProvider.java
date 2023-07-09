@@ -115,6 +115,19 @@ public interface IKnowledgeProvider extends INBTSerializable<CompoundTag> {
 	void setEmc(BigInteger emc);
 
 	/**
+	 * @return The research fragments for each item, known by this player.
+	 */
+	Map<ItemInfo, Integer> getResearchFragments();
+
+	/**
+	 * @param item item to set research fragments for (does not have to be in this player's knowledge)
+	 * @param numFragments number of fragments to set for this item
+	 *
+	 * @return true if the given numFragments is different from what is already known, false otherwise
+	 */
+	boolean setResearchFragments(@NotNull ItemInfo item, int numFragments);
+
+	/**
 	 * Syncs this provider to the given player.
 	 *
 	 * @param player The player to sync to.
@@ -136,6 +149,15 @@ public interface IKnowledgeProvider extends INBTSerializable<CompoundTag> {
 	 * @param learned True if learned, false if unlearned.
 	 */
 	void syncKnowledgeChange(@NotNull ServerPlayer player, ItemInfo change, boolean learned);
+
+	/**
+	 * Syncs that a specific item's research changed to the given player.
+	 *
+	 * @param player  The player to sync to.
+	 * @param item  The item that's research changed. (Should be the persistent variant)
+	 * @param numFragments The new research value for this item
+	 */
+	void syncResearchFragmentChange(@NotNull ServerPlayer player, ItemInfo item, int numFragments);
 
 	/**
 	 * Syncs the inputs and locks stored in this provider to the given player.

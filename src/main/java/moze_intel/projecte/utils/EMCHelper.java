@@ -23,6 +23,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -151,24 +152,42 @@ public final class EMCHelper {
 		return NBTManager.getEmcValue(info);
 	}
 
-	@Range(from = 0, to = Long.MAX_VALUE)
-	public static long getEmcSellValue(ItemStack stack) {
-		return stack.isEmpty() ? 0 : getEmcSellValue(ItemInfo.fromStack(stack));
+	private static double getEmcBuyMultiplier(ItemInfo info, @Nullable Player player) {
+		return ProjectEConfig.server.difficulty.maxCreationCostMultiplier.get();
+	}
+
+	private static double getEmcSellMultiplier(ItemInfo info, @Nullable Player player) {
+		return ProjectEConfig.server.difficulty.minBurnEfficiency.get();
 	}
 
 	@Range(from = 0, to = Long.MAX_VALUE)
-	public static long getEmcSellValue(ItemInfo info) {
-		return getEmcSellValue(getEmcValue(info));
+	public static long getEmcBuyValue(ItemStack stack, @Nullable Player player) {
+		return getEmcBuyValue(ItemInfo.fromStack(stack), player);
 	}
 
 	@Range(from = 0, to = Long.MAX_VALUE)
-	public static long getEmcSellValue(@Range(from = 0, to = Long.MAX_VALUE) long originalValue) {
+	public static long getEmcBuyValue(ItemInfo info, @Nullable Player player) {
+		long originalValue = getEmcValue(info);
 		if (originalValue == 0) {
 			return 0;
 		}
-		long emc = (long) Math.floor(originalValue * ProjectEConfig.server.difficulty.covalenceLoss.get());
+		return (long) Math.floor(originalValue * getEmcBuyMultiplier(info, player));
+	}
+
+	@Range(from = 0, to = Long.MAX_VALUE)
+	public static long getEmcSellValue(ItemStack stack, @Nullable Player player) {
+		return stack.isEmpty() ? 0 : getEmcSellValue(ItemInfo.fromStack(stack), player);
+	}
+
+	@Range(from = 0, to = Long.MAX_VALUE)
+	public static long getEmcSellValue(ItemInfo info, @Nullable Player player) {
+		long originalValue = getEmcValue(info);
+		if (originalValue == 0) {
+			return 0;
+		}
+		long emc = (long) Math.floor(originalValue * getEmcSellMultiplier(info, player));
 		if (emc < 1) {
-			if (ProjectEConfig.server.difficulty.covalenceLossRounding.get()) {
+			if (ProjectEConfig.server.difficulty.burnCostRounding.get()) {
 				emc = 1;
 			} else {
 				emc = 0;
@@ -177,8 +196,19 @@ public final class EMCHelper {
 		return emc;
 	}
 
-	public static Component getEmcTextComponent(long emc, int stackSize) {
-		if (ProjectEConfig.server.difficulty.covalenceLoss.get() == 1.0) {
+	public static Component getEmcTextComponent(ItemLike item, int stackSize, @Nullable Player player) {
+		return getEmcTextComponent(ItemInfo.fromItem(item), stackSize, player);
+	}
+
+	public static Component getEmcTextComponent(ItemStack item, int stackSizeUsed, @Nullable Player player) {
+		return getEmcTextComponent(ItemInfo.fromStack(item), stackSizeUsed, player);
+	}
+
+	public static Component getEmcTextComponent(ItemInfo info, int stackSize, @Nullable Player player) {
+		long emc = getEmcValue(info);
+
+		boolean showExtraBuyAndSellInfo = player != null;
+		if (!showExtraBuyAndSellInfo) {
 			ILangEntry prefix;
 			String value;
 			if (stackSize > 1) {
@@ -190,22 +220,26 @@ public final class EMCHelper {
 			}
 			return prefix.translateColored(ChatFormatting.YELLOW, ChatFormatting.WHITE, value);
 		}
-		//Sell enabled
-		long emcSellValue = getEmcSellValue(emc);
+
+		long emcSellValue = getEmcSellValue(info, player);
+		long emcBuyValue = getEmcBuyValue(info, player);
 		ILangEntry prefix;
 		String value;
 		String sell;
+		String buy;
 		if (stackSize > 1) {
 			prefix = PELang.EMC_STACK_TOOLTIP_WITH_SELL;
 			BigInteger bigIntStack = BigInteger.valueOf(stackSize);
 			value = Constants.EMC_FORMATTER.format(BigInteger.valueOf(emc).multiply(bigIntStack));
 			sell = Constants.EMC_FORMATTER.format(BigInteger.valueOf(emcSellValue).multiply(bigIntStack));
+			buy = Constants.EMC_FORMATTER.format(BigInteger.valueOf(emcBuyValue).multiply(bigIntStack));
 		} else {
 			prefix = PELang.EMC_TOOLTIP_WITH_SELL;
 			value = Constants.EMC_FORMATTER.format(emc);
 			sell = Constants.EMC_FORMATTER.format(emcSellValue);
+			buy = Constants.EMC_FORMATTER.format(emcBuyValue);
 		}
-		return prefix.translateColored(ChatFormatting.YELLOW, ChatFormatting.WHITE, value, ChatFormatting.BLUE, sell);
+		return prefix.translateColored(ChatFormatting.YELLOW, ChatFormatting.WHITE, value, ChatFormatting.BLUE, sell, ChatFormatting.BLUE, buy);
 	}
 
 	@Range(from = 1, to = Long.MAX_VALUE)

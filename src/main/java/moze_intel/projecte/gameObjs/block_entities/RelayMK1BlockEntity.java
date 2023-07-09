@@ -95,7 +95,7 @@ public class RelayMK1BlockEntity extends CapabilityEmcBlockEntity implements Men
 					relay.forceInsertEmc(emcHolder.extractEmc(stack, simulatedVal, EmcAction.EXECUTE), EmcAction.EXECUTE);
 				}
 			} else {
-				long emcVal = EMCHelper.getEmcSellValue(stack);
+				long emcVal = EMCHelper.getEmcSellValue(stack, null);
 				if (emcVal > 0 && emcVal <= relay.getNeededEmc()) {
 					relay.forceInsertEmc(emcVal, EmcAction.EXECUTE);
 					relay.getBurn().shrink(1);

@@ -96,6 +96,13 @@ public class TransmutationInventory extends CombinedInvWrapper {
 	}
 
 	/**
+	 * @apiNote Call on client only
+	 */
+	public void itemResearchUpdated() {
+		updateClientTargets();
+	}
+
+	/**
 	 * @apiNote Call on server only
 	 * @implNote The passed stack will not be directly modified by this method.
 	 */

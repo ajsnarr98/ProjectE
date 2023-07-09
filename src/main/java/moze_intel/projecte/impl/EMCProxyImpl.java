@@ -24,7 +24,7 @@ public class EMCProxyImpl implements IEMCProxy {
 	@Override
 	@Range(from = 0, to = Long.MAX_VALUE)
 	public long getSellValue(@NotNull ItemInfo info) {
-		return EMCHelper.getEmcSellValue(Objects.requireNonNull(info));
+		return EMCHelper.getEmcSellValue(Objects.requireNonNull(info), null);
 	}
 
 	@NotNull

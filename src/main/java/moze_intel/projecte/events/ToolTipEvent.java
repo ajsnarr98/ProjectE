@@ -52,9 +52,9 @@ public class ToolTipEvent {
 		if (ProjectEConfig.client.emcToolTips.get() && (!ProjectEConfig.client.shiftEmcToolTips.get() || Screen.hasShiftDown())) {
 			long value = EMCHelper.getEmcValue(current);
 			if (value > 0) {
-				event.getToolTip().add(EMCHelper.getEmcTextComponent(value, 1));
+				event.getToolTip().add(EMCHelper.getEmcTextComponent(current, 1, clientPlayer));
 				if (current.getCount() > 1) {
-					event.getToolTip().add(EMCHelper.getEmcTextComponent(value, current.getCount()));
+					event.getToolTip().add(EMCHelper.getEmcTextComponent(current, current.getCount(), clientPlayer));
 				}
 				if (Screen.hasShiftDown() && clientPlayer != null && clientPlayer.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY).map(k -> k.hasKnowledge(current)).orElse(false)) {
 					event.getToolTip().add(PELang.EMC_HAS_KNOWLEDGE.translateColored(ChatFormatting.YELLOW));

@@ -178,8 +178,8 @@ public class PELangProvider extends BaseLanguageProvider {
 		add(PELang.EMC_HAS_KNOWLEDGE, "Transmutable");
 		add(PELang.EMC_TOOLTIP, "EMC: %s");
 		add(PELang.EMC_STACK_TOOLTIP, "Stack EMC: %s");
-		add(PELang.EMC_TOOLTIP_WITH_SELL, "EMC: %s (%s)");
-		add(PELang.EMC_STACK_TOOLTIP_WITH_SELL, "Stack EMC: %s (%s)");
+		add(PELang.EMC_TOOLTIP_WITH_SELL, "EMC: %s (%s) (%s)");
+		add(PELang.EMC_STACK_TOOLTIP_WITH_SELL, "Stack EMC: %s (%s) (%s)");
 		add(PELang.EMC_TOO_MUCH, "WAY TOO MUCH");
 		//Postfix names for large EMC values. Names gotten from: https://en.wikipedia.org/wiki/Names_of_large_numbers
 		addPostfix(0, "Trillion");

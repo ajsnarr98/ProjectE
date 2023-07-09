@@ -3,6 +3,7 @@ package moze_intel.projecte.gameObjs.block_entities;
 import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.event.PlayerAttemptCondenserSetEvent;
 import moze_intel.projecte.capability.managing.BasicCapabilityResolver;
+import moze_intel.projecte.config.ProjectEConfig;
 import moze_intel.projecte.emc.EMCMappingHandler;
 import moze_intel.projecte.emc.nbt.NBTManager;
 import moze_intel.projecte.gameObjs.container.CondenserContainer;
@@ -120,6 +121,7 @@ public class CondenserBlockEntity extends EmcChestBlockEntity {
 		}
 		loadIndex = EMCMappingHandler.getLoadIndex();
 		if (lockInfo != null) {
+//			long lockEmc = EMCHelper.getEmcValue(lockInfo);
 			long lockEmc = EMCHelper.getEmcValue(lockInfo);
 			if (lockEmc > 0) {
 				if (requiredEmc != lockEmc) {
@@ -141,7 +143,7 @@ public class CondenserBlockEntity extends EmcChestBlockEntity {
 			ItemStack stack = inputInventory.getStackInSlot(i);
 			if (!stack.isEmpty() && !isStackEqualToLock(stack)) {
 				inputInventory.extractItem(i, 1, false);
-				forceInsertEmc(EMCHelper.getEmcSellValue(stack), EmcAction.EXECUTE);
+				forceInsertEmc(EMCHelper.getEmcSellValue(stack, null), EmcAction.EXECUTE);
 				break;
 			}
 		}

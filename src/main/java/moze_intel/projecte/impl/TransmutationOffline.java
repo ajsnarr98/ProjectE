@@ -1,6 +1,7 @@
 package moze_intel.projecte.impl;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
+import com.ibm.icu.impl.locale.XCldrStub;
 import moze_intel.projecte.PECore;
 import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
@@ -83,6 +86,8 @@ public class TransmutationOffline {
 			final Set<ItemInfo> immutableKnowledge = ImmutableSet.copyOf(toCopy.getKnowledge());
 			final IItemHandlerModifiable immutableInputLocks = ItemHelper.immutableCopy(toCopy.getInputAndLocks());
 
+			final Map<ItemInfo, Integer> immutableResearchFragments = ImmutableMap.copyOf(toCopy.getResearchFragments());
+
 			@Override
 			public boolean hasFullKnowledge() {
 				return toCopy.hasFullKnowledge();
@@ -133,6 +138,12 @@ public class TransmutationOffline {
 			}
 
 			@Override
+			public Map<ItemInfo, Integer> getResearchFragments() { return immutableResearchFragments; }
+
+			@Override
+			public boolean setResearchFragments(@NotNull ItemInfo item, int numFragments) { return false; }
+
+			@Override
 			public void sync(@NotNull ServerPlayer player) {
 				toCopy.sync(player);
 			}
@@ -145,6 +156,11 @@ public class TransmutationOffline {
 			@Override
 			public void syncKnowledgeChange(@NotNull ServerPlayer player, ItemInfo change, boolean learned) {
 				toCopy.syncKnowledgeChange(player, change, learned);
+			}
+
+			@Override
+			public void syncResearchFragmentChange(@NotNull ServerPlayer player, ItemInfo item, int numFragments) {
+				toCopy.syncResearchFragmentChange(player, item, numFragments);
 			}
 
 			@Override

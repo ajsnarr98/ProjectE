@@ -16,7 +16,7 @@ public class HwylaDataProvider implements IComponentProvider {
 		if (ProjectEConfig.server.misc.hwylaTOPDisplay.get()) {
 			long value = EMCHelper.getEmcValue(accessor.getBlock());
 			if (value > 0) {
-				tooltip.add(EMCHelper.getEmcTextComponent(value, 1));
+				tooltip.add(EMCHelper.getEmcTextComponent(accessor.getBlock(), 1, null));
 			}
 		}
 	}

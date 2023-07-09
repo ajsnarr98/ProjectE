@@ -13,6 +13,7 @@ import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.api.event.PlayerKnowledgeChangeEvent;
+import moze_intel.projecte.api.event.PlayerResearchChangeEvent;
 import moze_intel.projecte.capability.managing.SerializableCapabilityResolver;
 import moze_intel.projecte.emc.EMCMappingHandler;
 import moze_intel.projecte.emc.nbt.NBTManager;
@@ -22,13 +23,16 @@ import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncChan
 import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncEmcPKT;
 import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncInputsAndLocksPKT;
 import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncPKT;
+import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncResearchChangePKT;
 import moze_intel.projecte.utils.EMCHelper;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
@@ -48,6 +52,8 @@ public final class KnowledgeImpl {
 		@Nullable
 		private final Player player;
 		private final Set<ItemInfo> knowledge = new HashSet<>();
+
+		private final Map<ItemInfo, Integer> researchFragments = new HashMap<>();
 		private final ItemStackHandler inputLocks = new ItemStackHandler(9);
 		private BigInteger emc = BigInteger.ZERO;
 		private boolean fullKnowledge = false;
@@ -56,9 +62,15 @@ public final class KnowledgeImpl {
 			this.player = player;
 		}
 
-		private void fireChangedEvent() {
+		private void fireKnowledgeChangedEvent() {
 			if (player != null && !player.level.isClientSide) {
 				MinecraftForge.EVENT_BUS.post(new PlayerKnowledgeChangeEvent(player));
+			}
+		}
+
+		private void fireResearchChangedEvent() {
+			if (player != null && !player.level.isClientSide) {
+				MinecraftForge.EVENT_BUS.post(new PlayerResearchChangeEvent(player));
 			}
 		}
 
@@ -72,7 +84,7 @@ public final class KnowledgeImpl {
 			boolean changed = this.fullKnowledge != fullKnowledge;
 			this.fullKnowledge = fullKnowledge;
 			if (changed) {
-				fireChangedEvent();
+				fireKnowledgeChangedEvent();
 			}
 		}
 
@@ -83,7 +95,7 @@ public final class KnowledgeImpl {
 			fullKnowledge = false;
 			if (hasKnowledge) {
 				//If we previously had any knowledge fire the fact that our knowledge changed
-				fireChangedEvent();
+				fireKnowledgeChangedEvent();
 			}
 		}
 
@@ -136,7 +148,7 @@ public final class KnowledgeImpl {
 				// so can just check if it is already in it by nature of it being a set
 				knowledge.add(info);
 				fullKnowledge = true;
-				fireChangedEvent();
+				fireKnowledgeChangedEvent();
 				return true;
 			}
 			return tryAdd(NBTManager.getPersistentInfo(info));
@@ -144,7 +156,7 @@ public final class KnowledgeImpl {
 
 		private boolean tryAdd(@NotNull ItemInfo cleanedInfo) {
 			if (knowledge.add(cleanedInfo)) {
-				fireChangedEvent();
+				fireKnowledgeChangedEvent();
 				return true;
 			}
 			return false;
@@ -161,7 +173,7 @@ public final class KnowledgeImpl {
 					}
 					knowledge.remove(info);
 					fullKnowledge = false;
-					fireChangedEvent();
+					fireKnowledgeChangedEvent();
 					return true;
 				}
 				//Otherwise check if we have any persistent information, and if so try removing that
@@ -174,7 +186,7 @@ public final class KnowledgeImpl {
 
 		private boolean tryRemove(@NotNull ItemInfo cleanedInfo) {
 			if (knowledge.remove(cleanedInfo)) {
-				fireChangedEvent();
+				fireKnowledgeChangedEvent();
 				return true;
 			}
 			return false;
@@ -209,6 +221,21 @@ public final class KnowledgeImpl {
 		}
 
 		@Override
+		public Map<ItemInfo, Integer> getResearchFragments() {
+			return Collections.unmodifiableMap(researchFragments);
+		}
+
+		@Override
+		public boolean setResearchFragments(@NotNull ItemInfo item, int numFragments) {
+			Integer prevValue = researchFragments.put(NBTManager.getPersistentInfo(item), numFragments);
+			if (prevValue == null || prevValue.intValue() == numFragments) {
+				fireResearchChangedEvent();
+				return true;
+			}
+			return false;
+		}
+
+		@Override
 		public void sync(@NotNull ServerPlayer player) {
 			PacketHandler.sendTo(new KnowledgeSyncPKT(serializeNBT()), player);
 		}
@@ -221,6 +248,11 @@ public final class KnowledgeImpl {
 		@Override
 		public void syncKnowledgeChange(@NotNull ServerPlayer player, ItemInfo change, boolean learned) {
 			PacketHandler.sendTo(new KnowledgeSyncChangePKT(change, learned), player);
+		}
+
+		@Override
+		public void syncResearchFragmentChange(@NotNull ServerPlayer player, ItemInfo item, int numFragments) {
+			PacketHandler.sendTo(new KnowledgeSyncResearchChangePKT(item, numFragments), player);
 		}
 
 		@Override
@@ -263,7 +295,19 @@ public final class KnowledgeImpl {
 				knowledgeWrite.add(i.write(new CompoundTag()));
 			}
 
+			ListTag researchWrite = new ListTag();
+			for (Map.Entry<ItemInfo, Integer> entry: researchFragments.entrySet()) {
+				if (entry.getValue() != null && entry.getValue() > 0) {
+					CompoundTag researchEntry = new CompoundTag();
+					researchEntry.put("key", entry.getKey().write(new CompoundTag()));
+					researchEntry.putInt("value", entry.getValue());
+
+					researchWrite.add(researchEntry);
+				}
+			}
+
 			properties.put("knowledge", knowledgeWrite);
+			properties.put("research", researchWrite);
 			properties.put("inputlock", inputLocks.serializeNBT());
 			properties.putBoolean("fullknowledge", fullKnowledge);
 			return properties;
@@ -274,12 +318,19 @@ public final class KnowledgeImpl {
 			String transmutationEmc = properties.getString("transmutationEmc");
 			emc = transmutationEmc.isEmpty() ? BigInteger.ZERO : new BigInteger(transmutationEmc);
 
-			ListTag list = properties.getList("knowledge", Tag.TAG_COMPOUND);
-			for (int i = 0; i < list.size(); i++) {
-				ItemInfo info = ItemInfo.read(list.getCompound(i));
+			ListTag knowledgeList = properties.getList("knowledge", Tag.TAG_COMPOUND);
+			for (int i = 0; i < knowledgeList.size(); i++) {
+				ItemInfo info = ItemInfo.read(knowledgeList.getCompound(i));
 				if (info != null) {
 					knowledge.add(info);
 				}
+			}
+
+			ListTag researchList = properties.getList("research", Tag.TAG_COMPOUND);
+			researchFragments.clear();
+			for (int i = 0; i < researchList.size(); i++) {
+				CompoundTag entry = researchList.getCompound(i);
+				researchFragments.put(ItemInfo.read(entry.getCompound("key")), entry.getInt("value"));
 			}
 
 			for (int i = 0; i < inputLocks.getSlots(); i++) {
