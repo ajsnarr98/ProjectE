@@ -8,6 +8,7 @@ import moze_intel.projecte.emc.EMCMappingHandler;
 import moze_intel.projecte.emc.FuelMapper;
 import moze_intel.projecte.network.packets.IPEPacket;
 import moze_intel.projecte.network.packets.to_client.CooldownResetPKT;
+import moze_intel.projecte.network.packets.to_client.ResearchResultPKT;
 import moze_intel.projecte.network.packets.to_client.SetFlyPKT;
 import moze_intel.projecte.network.packets.to_client.SyncBagDataPKT;
 import moze_intel.projecte.network.packets.to_client.SyncEmcPKT;
@@ -21,7 +22,9 @@ import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncChan
 import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncEmcPKT;
 import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncInputsAndLocksPKT;
 import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncPKT;
+import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncResearchChangePKT;
 import moze_intel.projecte.network.packets.to_client.knowledge.UpdateTransmutationTargetsPkt;
+import moze_intel.projecte.network.packets.to_server.ConsumeResearchItemsPKT;
 import moze_intel.projecte.network.packets.to_server.KeyPressPKT;
 import moze_intel.projecte.network.packets.to_server.LeftClickArchangelPKT;
 import moze_intel.projecte.network.packets.to_server.SearchUpdatePKT;
@@ -51,6 +54,7 @@ public final class PacketHandler {
 		registerClientToServer(LeftClickArchangelPKT.class, LeftClickArchangelPKT::decode);
 		registerClientToServer(SearchUpdatePKT.class, SearchUpdatePKT::decode);
 		registerClientToServer(UpdateGemModePKT.class, UpdateGemModePKT::decode);
+		registerClientToServer(ConsumeResearchItemsPKT.class, ConsumeResearchItemsPKT::decode);
 
 		//Server to client messages
 		registerServerToClient(CooldownResetPKT.class, CooldownResetPKT::decode);
@@ -59,6 +63,8 @@ public final class PacketHandler {
 		registerServerToClient(KnowledgeSyncEmcPKT.class, KnowledgeSyncEmcPKT::decode);
 		registerServerToClient(KnowledgeSyncInputsAndLocksPKT.class, KnowledgeSyncInputsAndLocksPKT::decode);
 		registerServerToClient(KnowledgeSyncChangePKT.class, KnowledgeSyncChangePKT::decode);
+		registerServerToClient(KnowledgeSyncResearchChangePKT.class, KnowledgeSyncResearchChangePKT::decode);
+		registerServerToClient(ResearchResultPKT.class, ResearchResultPKT::decode);
 		registerServerToClient(SetFlyPKT.class, SetFlyPKT::decode);
 		registerServerToClient(SyncBagDataPKT.class, SyncBagDataPKT::decode);
 		registerServerToClient(SyncEmcPKT.class, SyncEmcPKT::decode);

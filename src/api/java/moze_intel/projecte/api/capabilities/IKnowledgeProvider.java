@@ -161,9 +161,8 @@ public interface IKnowledgeProvider extends INBTSerializable<CompoundTag> {
 	 *
 	 * @param player  The player to sync to.
 	 * @param item  The item that's research changed. (Should be the persistent variant)
-	 * @param numFragments The new research value for this item
 	 */
-	void syncResearchFragmentChange(@NotNull ServerPlayer player, ItemInfo item, int numFragments);
+	void syncResearchFragmentChange(@NotNull ServerPlayer player, ItemInfo item);
 
 	/**
 	 * Syncs the inputs and locks stored in this provider to the given player.

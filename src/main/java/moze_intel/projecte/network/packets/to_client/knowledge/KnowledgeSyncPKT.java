@@ -2,6 +2,7 @@ package moze_intel.projecte.network.packets.to_client.knowledge;
 
 import moze_intel.projecte.PECore;
 import moze_intel.projecte.api.capabilities.PECapabilities;
+import moze_intel.projecte.gameObjs.container.ResearchContainer;
 import moze_intel.projecte.gameObjs.container.TransmutationContainer;
 import moze_intel.projecte.network.packets.IPEPacket;
 import net.minecraft.client.Minecraft;
@@ -20,6 +21,8 @@ public record KnowledgeSyncPKT(CompoundTag nbt) implements IPEPacket {
 				cap.deserializeNBT(nbt);
 				if (player.containerMenu instanceof TransmutationContainer container) {
 					container.transmutationInventory.updateClientTargets();
+				} else if (player.containerMenu instanceof ResearchContainer container) {
+					container.researchInventory.updateClientTargets();
 				}
 			});
 		}

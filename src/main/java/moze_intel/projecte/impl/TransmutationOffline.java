@@ -164,8 +164,8 @@ public class TransmutationOffline {
 			}
 
 			@Override
-			public void syncResearchFragmentChange(@NotNull ServerPlayer player, ItemInfo item, int numFragments) {
-				toCopy.syncResearchFragmentChange(player, item, numFragments);
+			public void syncResearchFragmentChange(@NotNull ServerPlayer player, ItemInfo item) {
+				toCopy.syncResearchFragmentChange(player, item);
 			}
 
 			@Override

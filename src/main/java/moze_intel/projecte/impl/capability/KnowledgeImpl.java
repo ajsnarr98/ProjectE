@@ -15,6 +15,7 @@ import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.api.event.PlayerKnowledgeChangeEvent;
 import moze_intel.projecte.api.event.PlayerResearchChangeEvent;
 import moze_intel.projecte.capability.managing.SerializableCapabilityResolver;
+import moze_intel.projecte.config.ProjectEConfig;
 import moze_intel.projecte.emc.EMCMappingHandler;
 import moze_intel.projecte.emc.nbt.NBTManager;
 import moze_intel.projecte.gameObjs.items.Tome;
@@ -227,7 +228,9 @@ public final class KnowledgeImpl {
 
 		@Override
 		public int getResearchFragments(@NotNull ItemInfo item) {
-			return researchFragments.getOrDefault(NBTManager.getPersistentInfo(item), 0);
+			int frags = researchFragments.getOrDefault(NBTManager.getPersistentInfo(item), 0);
+			// clamp to be in range
+			return Math.max(0, Math.min(ProjectEConfig.server.difficulty.researchFragmentsPerItem.get(), frags));
 		}
 
 		@Override
@@ -256,8 +259,8 @@ public final class KnowledgeImpl {
 		}
 
 		@Override
-		public void syncResearchFragmentChange(@NotNull ServerPlayer player, ItemInfo item, int numFragments) {
-			PacketHandler.sendTo(new KnowledgeSyncResearchChangePKT(item, numFragments), player);
+		public void syncResearchFragmentChange(@NotNull ServerPlayer player, ItemInfo item) {
+			PacketHandler.sendTo(new KnowledgeSyncResearchChangePKT(item, getResearchFragments(item)), player);
 		}
 
 		@Override

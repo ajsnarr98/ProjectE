@@ -4,6 +4,9 @@ import java.math.BigInteger;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
+
+import com.mojang.datafixers.util.Pair;
 import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
@@ -154,6 +157,61 @@ public final class EMCHelper {
 		return NBTManager.getEmcValue(info);
 	}
 
+	/**
+	 * @param stack items available for research
+	 * @param provider provider
+	 * @return simulated research results
+	 */
+	public static ResearchResult getResearchResults(
+		@NotNull ItemStack stack,
+		@NotNull IKnowledgeProvider provider
+	) {
+		return getResearchResults(ItemInfo.fromStack(stack), stack.getCount(), provider);
+	}
+
+	/**
+	 * @param item item available for research
+	 * @param count num items available for research
+	 * @param provider provider
+	 * @return simulated research results
+	 */
+	public static ResearchResult getResearchResults(
+		@NotNull ItemInfo item,
+		int count,
+		@NotNull IKnowledgeProvider provider
+	) {
+		int consumed = 0;
+		int existingFragments = provider.getResearchFragments(item);
+		int newFragments = 0;
+		int maxFragments = ProjectEConfig.server.difficulty.researchFragmentsPerItem.get();
+		Random rand = new Random(System.currentTimeMillis());
+		while (consumed < count && (existingFragments + newFragments) < maxFragments) {
+			// each time, pretend like we are choosing a random slot among [maxFragments] slots,
+			// then if the slot is already taken by an existing fragment (where existing fragments
+			// fill from the first slot onwards), research fails, if we choose an empty slot,
+			// we get a new fragment
+			if (Math.round(rand.nextDouble() * maxFragments) > (existingFragments + newFragments)) {
+				newFragments++;
+			}
+			consumed++;
+		}
+
+		return new ResearchResult(
+			consumed,
+			newFragments,
+			(newFragments + existingFragments) >= maxFragments && consumed < count
+		);
+	}
+
+	public record ResearchResult(
+		int itemsConsumed,
+		int researchFragmentsReceived,
+		boolean stoppedBecauseMaxFragments
+	) {
+		public boolean isEmpty() {
+			return itemsConsumed == 0 && researchFragmentsReceived == 0;
+		}
+	}
 	private static double getEmcBuyMultiplier(ItemInfo info, @Nullable IKnowledgeProvider provider) {
 		return ProjectEConfig.server.difficulty.maxCreationCostMultiplier.get();
 	}

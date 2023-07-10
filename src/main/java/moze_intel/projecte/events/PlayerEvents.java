@@ -5,6 +5,7 @@ import moze_intel.projecte.PECore;
 import moze_intel.projecte.api.capabilities.IAlchBagProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
 import moze_intel.projecte.capability.managing.BasicCapabilityResolver;
+import moze_intel.projecte.gameObjs.container.ResearchContainer;
 import moze_intel.projecte.gameObjs.items.AlchemicalBag;
 import moze_intel.projecte.gameObjs.items.armor.PEArmor;
 import moze_intel.projecte.handlers.CommonInternalAbilities;
@@ -39,6 +40,7 @@ import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -206,5 +208,19 @@ public class PlayerEvents {
 			return Math.max(armorItem.getFullSetBaseReduction(), armorItem.getMaxDamageAbsorb(type, source) / damage) * armorItem.getPieceEffectiveness(type);
 		}
 		return 0;
+	}
+
+	@SubscribeEvent
+	public static void onPlayerContainerClose(PlayerContainerEvent.Close evt) {
+		if (evt.getContainer() instanceof ResearchContainer container) {
+			container.researchInventory.onCloseContainer();
+		}
+	}
+
+	@SubscribeEvent
+	public static void onPlayerDisconnect(PlayerEvent.PlayerLoggedOutEvent evt) {
+		if (evt.getPlayer().containerMenu instanceof ResearchContainer container) {
+			container.researchInventory.onCloseContainer();
+		}
 	}
 }

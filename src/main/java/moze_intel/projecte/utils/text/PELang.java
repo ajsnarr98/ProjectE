@@ -50,6 +50,7 @@ public enum PELang implements ILangEntry {
 	EMC_STACK_TOOLTIP("emc", "tooltip.stack"),
 	EMC_TOOLTIP_WITH_SELL("emc", "tooltip.with_sell"),
 	EMC_STACK_TOOLTIP_WITH_SELL("emc", "tooltip.stack.with_sell"),
+	EMC_RESEARCH_TOOLTIP("emc", "tooltip.research.fragments"),
 	EMC_TOO_MUCH("emc", "too_much"),
 	//JEI
 	JEI_COLLECTOR("jei", "collector"),
@@ -193,6 +194,9 @@ public enum PELang implements ILangEntry {
 	RESEARCH_BASE_EMC("research", "emc.base"),
 	RESEARCH_SELL_EMC("research", "emc.sell"),
 	RESEARCH_BUY_EMC("research", "emc.buy"),
+	RESEARCH_RESULT("research", "result"),
+	RESEARCH_RESULT_MAX("research", "result.max"),
+	RESEARCH_RESULT_FAILURE("research", "result.failure"),
 	//Advancements
 	ADVANCEMENTS_PROJECTE_DESCRIPTION("advancements", "description"),
 	ADVANCEMENTS_PHILO_STONE("advancements", "philo_stone"),

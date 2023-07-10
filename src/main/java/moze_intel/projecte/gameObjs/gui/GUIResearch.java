@@ -13,8 +13,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
-
 public class GUIResearch extends PEContainerScreen<ResearchContainer> {
 
     private static final ResourceLocation texture = PECore.rl("textures/gui/research.png");
@@ -35,8 +33,7 @@ public class GUIResearch extends PEContainerScreen<ResearchContainer> {
         super.init();
 
         addRenderableWidget(new Button(leftPos + 13, topPos + 48, 51, 20, PELang.RESEARCH_RESEARCH_BUTTON.translate(), b -> {
-            // TODO
-            inv.updateClientTargets();
+            inv.onClickConsume();
         }));
     }
 
@@ -46,7 +43,7 @@ public class GUIResearch extends PEContainerScreen<ResearchContainer> {
         this.font.draw(matrix, title, titleLabelX, titleLabelY, textColor);
 
         if (inv.hasItemInfoText()) {
-            float xAlign = 75;
+            float xAlign = 68;
             float y = 26;
             float yGap = 14;
 
@@ -57,6 +54,10 @@ public class GUIResearch extends PEContainerScreen<ResearchContainer> {
             this.font.draw(matrix, inv.getItemSellEMC(), xAlign, y, textColor);
             y += yGap;
             this.font.draw(matrix, inv.getItemBuyEMC(), xAlign, y, textColor);
+        }
+        if (inv.researchResultFlag > 0 && inv.getResearchResults() != null) {
+            this.font.draw(matrix, inv.getResearchResults(), 28, 90, textColor);
+            inv.researchResultFlag--;
         }
     }
 

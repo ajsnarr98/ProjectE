@@ -109,6 +109,7 @@
   "emc.projecte.tooltip.stack": "Stack EMC: %s",
   "emc.projecte.tooltip.stack.with_sell": "Stack EMC: %s (%s) (%s)",
   "emc.projecte.tooltip.with_sell": "EMC: %s (%s) (%s)",
+  "emc.projecte.tooltip.research.fragments": "Knowledge Fragments: (%s/%s)",
   "entity.projecte.fire_projectile": "Fireball",
   "entity.projecte.homing_arrow": "Homing Arrow",
   "entity.projecte.lava_projectile": "Lava Orb",
@@ -357,5 +358,8 @@
   "research.projecte.fraction": "%s / %s",
   "research.projecte.emc.base": "Base EMC: %s",
   "research.projecte.emc.sell": "Converting item to EMC: %s",
-  "research.projecte.emc.buy": "Converting EMC to item: %s"
+  "research.projecte.emc.buy": "Converting EMC to item: %s",
+  "research.projecte.result": "Found %s new knowledge fragments!",
+  "research.projecte.result.max": "Already found all knowledge for this item!",
+  "research.projecte.result.failure": "Found %s new knowledge fragments"
 }
