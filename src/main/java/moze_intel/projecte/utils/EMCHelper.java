@@ -190,7 +190,7 @@ public final class EMCHelper {
 			// then if the slot is already taken by an existing fragment (where existing fragments
 			// fill from the first slot onwards), research fails, if we choose an empty slot,
 			// we get a new fragment
-			if (Math.round(rand.nextDouble() * maxFragments) > (existingFragments + newFragments)) {
+			if (rand.nextDouble() * maxFragments > (existingFragments + newFragments)) {
 				newFragments++;
 			}
 			consumed++;
@@ -213,11 +213,28 @@ public final class EMCHelper {
 		}
 	}
 	private static double getEmcBuyMultiplier(ItemInfo info, @Nullable IKnowledgeProvider provider) {
-		return ProjectEConfig.server.difficulty.maxCreationCostMultiplier.get();
+		if (provider == null || ProjectEConfig.server.difficulty.maxCreationCostMultiplier.get() <= ProjectEConfig.server.difficulty.minCreationCostMultiplier.get()) {
+			// return max multiplier
+			return ProjectEConfig.server.difficulty.maxCreationCostMultiplier.get();
+		}
+		int research = provider.getResearchFragments(info);
+		double percentageComplete = (research * 1.0) / ProjectEConfig.server.difficulty.researchFragmentsPerItem.get();
+		double diff = ProjectEConfig.server.difficulty.maxCreationCostMultiplier.get() - ProjectEConfig.server.difficulty.minCreationCostMultiplier.get();
+
+		return ProjectEConfig.server.difficulty.maxCreationCostMultiplier.get() - diff * percentageComplete;
 	}
 
 	private static double getEmcSellMultiplier(ItemInfo info, @Nullable IKnowledgeProvider provider) {
-		return ProjectEConfig.server.difficulty.minBurnEfficiency.get();
+		if (provider == null || ProjectEConfig.server.difficulty.maxBurnEfficiency.get() <= ProjectEConfig.server.difficulty.minBurnEfficiency.get()) {
+			// return min efficiency
+			return ProjectEConfig.server.difficulty.minBurnEfficiency.get();
+		}
+
+		int research = provider.getResearchFragments(info);
+		double percentageComplete = (research * 1.0) / ProjectEConfig.server.difficulty.researchFragmentsPerItem.get();
+		double diff = ProjectEConfig.server.difficulty.maxBurnEfficiency.get() - ProjectEConfig.server.difficulty.minBurnEfficiency.get();
+
+		return ProjectEConfig.server.difficulty.minBurnEfficiency.get() + diff * percentageComplete;
 	}
 
 	@Range(from = 0, to = Long.MAX_VALUE)
@@ -300,6 +317,21 @@ public final class EMCHelper {
 			buy = Constants.EMC_FORMATTER.format(emcBuyValue);
 		}
 		return prefix.translateColored(ChatFormatting.YELLOW, ChatFormatting.WHITE, value, ChatFormatting.BLUE, sell, ChatFormatting.BLUE, buy);
+	}
+
+	public static Component getResearchTextComponent(ItemStack item, @Nullable IKnowledgeProvider provider) {
+		return getResearchTextComponent(ItemInfo.fromStack(item), provider);
+	}
+
+	@Nullable
+	public static Component getResearchTextComponent(ItemInfo item, @Nullable IKnowledgeProvider provider) {
+		if (provider == null) {
+			return null;
+		}
+
+		int research = provider.getResearchFragments(item);
+		int maxResearch = ProjectEConfig.server.difficulty.researchFragmentsPerItem.get();
+		return PELang.EMC_RESEARCH_TOOLTIP.translateColored(ChatFormatting.DARK_PURPLE, ChatFormatting.LIGHT_PURPLE, research, ChatFormatting.LIGHT_PURPLE, maxResearch);
 	}
 
 	@Range(from = 1, to = Long.MAX_VALUE)

@@ -66,6 +66,10 @@ public class ToolTipEvent {
 				if (current.getCount() > 1) {
 					event.getToolTip().add(EMCHelper.getEmcTextComponent(current, current.getCount(), knowledgeProvider));
 				}
+				Component researchTooltip = EMCHelper.getResearchTextComponent(current, knowledgeProvider);
+				if (researchTooltip != null) {
+					event.getToolTip().add(researchTooltip);
+				}
 				if (Screen.hasShiftDown() && optionalKnowledgeProvider.map(k -> k.hasKnowledge(current)).orElse(false)) {
 					event.getToolTip().add(PELang.EMC_HAS_KNOWLEDGE.translateColored(ChatFormatting.YELLOW));
 				}

@@ -26,6 +26,7 @@ public class PEProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
 			long value = EMCHelper.getEmcValue(item);
 			if (value > 0) {
 				probeInfo.mcText(EMCHelper.getEmcTextComponent(item, 1, null));
+				// TODO add research tooltip here?
 			}
 		}
 	}

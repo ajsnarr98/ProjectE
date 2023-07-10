@@ -109,7 +109,7 @@
   "emc.projecte.tooltip.stack": "Stack EMC: %s",
   "emc.projecte.tooltip.stack.with_sell": "Stack EMC: %s (%s) (%s)",
   "emc.projecte.tooltip.with_sell": "EMC: %s (%s) (%s)",
-  "emc.projecte.tooltip.research.fragments": "Knowledge Fragments: (%s/%s)",
+  "emc.projecte.tooltip.research.fragments": "EMC Knowledge Fragments: (%s/%s)",
   "entity.projecte.fire_projectile": "Fireball",
   "entity.projecte.homing_arrow": "Homing Arrow",
   "entity.projecte.lava_projectile": "Lava Orb",

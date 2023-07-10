@@ -971,7 +971,15 @@ public class PERecipeProvider extends RecipeProvider {
 	}
 
 	private static void addResearchTableRecipes(Consumer<FinishedRecipe> consumer) {
-		// TODO
+		ShapedRecipeBuilder.shaped(PEBlocks.RESEARCH_TABLE)
+			.pattern("GOG")
+			.pattern("OPO")
+			.pattern("GOG")
+			.define('G', Tags.Items.INGOTS_GOLD)
+			.define('O', Tags.Items.OBSIDIAN)
+			.define('P', PEItems.PHILOSOPHERS_STONE)
+			.unlockedBy("has_philo_stone", has(PEItems.PHILOSOPHERS_STONE))
+			.save(consumer);
 	}
 
 	private static void addNovaRecipes(Consumer<FinishedRecipe> consumer) {

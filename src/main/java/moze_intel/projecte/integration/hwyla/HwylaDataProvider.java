@@ -17,6 +17,7 @@ public class HwylaDataProvider implements IComponentProvider {
 			long value = EMCHelper.getEmcValue(accessor.getBlock());
 			if (value > 0) {
 				tooltip.add(EMCHelper.getEmcTextComponent(accessor.getBlock(), 1, null));
+				// TODO add research tooltip here?
 			}
 		}
 	}
