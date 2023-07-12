@@ -236,7 +236,7 @@ public final class KnowledgeImpl {
 		@Override
 		public boolean setResearchFragments(@NotNull ItemInfo item, int numFragments) {
 			Integer prevValue = researchFragments.put(NBTManager.getPersistentInfo(item), numFragments);
-			if (prevValue == null || prevValue.intValue() == numFragments) {
+			if (prevValue == null || prevValue.intValue() != numFragments) {
 				fireResearchChangedEvent();
 				return true;
 			}

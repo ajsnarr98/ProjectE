@@ -361,5 +361,7 @@
   "research.projecte.emc.buy": "Converting EMC to item: %s",
   "research.projecte.result": "Found %s new knowledge fragments!",
   "research.projecte.result.max": "Already found all knowledge for this item!",
-  "research.projecte.result.failure": "Found %s new knowledge fragments"
+  "research.projecte.result.failure": "Found %s new knowledge fragments",
+  "condenser.projecte.tooltip.use.player.research": "Use this player's knowledge fragments (%s)",
+  "condenser.projecte.tooltip.using.player.research": "Use research fragments from player:"
 }

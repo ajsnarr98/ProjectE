@@ -1,6 +1,8 @@
 package moze_intel.projecte.gameObjs.container;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.function.Predicate;
 import moze_intel.projecte.api.ItemInfo;
 import moze_intel.projecte.gameObjs.block_entities.CondenserBlockEntity;
@@ -12,8 +14,14 @@ import moze_intel.projecte.gameObjs.registration.impl.BlockRegistryObject;
 import moze_intel.projecte.gameObjs.registration.impl.ContainerTypeRegistryObject;
 import moze_intel.projecte.gameObjs.registries.PEBlocks;
 import moze_intel.projecte.gameObjs.registries.PEContainerTypes;
+import moze_intel.projecte.network.PacketHandler;
 import moze_intel.projecte.network.packets.to_client.UpdateCondenserLockPKT;
+import moze_intel.projecte.network.packets.to_server.AssignPlayerToPEContainerPKT;
 import moze_intel.projecte.utils.Constants;
+import moze_intel.projecte.utils.WorldHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
@@ -38,6 +46,37 @@ public class CondenserContainer extends EmcChestBlockEntityContainer<CondenserBl
 		this.longFields.add(displayEmc);
 		this.longFields.add(requiredEmc);
 		initSlots();
+	}
+
+	public boolean hasAssignedPlayerForResearch() {
+		return blockEntity.hasAssignedPlayerForResearch();
+	}
+
+	public List<Component> getTooltipComponents() {
+		return blockEntity.getTooltipComponents();
+	}
+
+	/**
+	 * Call on client only.
+	 */
+	public void onAssignCurrentPlayerToPEContainer(boolean isNowAssigned) {
+		PacketHandler.sendToServer(new AssignPlayerToPEContainerPKT(isNowAssigned));
+
+		LocalPlayer player;
+		if (isNowAssigned) {
+			player = Minecraft.getInstance().player;
+		} else {
+			player = null;
+		}
+		blockEntity.setAssociatedPlayerClient(player);
+	}
+
+	public CondenserBlockEntity getBlockEntitySafe()  {
+		if (blockEntity.isRemoved() || !WorldHelper.isBlockLoaded(blockEntity.getLevel(), blockEntity.getBlockPos())) {
+			return null;
+		} else {
+			return blockEntity;
+		}
 	}
 
 	protected void initSlots() {

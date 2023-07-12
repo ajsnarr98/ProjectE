@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import moze_intel.projecte.PECore;
 import moze_intel.projecte.gameObjs.container.CondenserContainer;
 import moze_intel.projecte.gameObjs.container.CondenserMK2Container;
+import moze_intel.projecte.gameObjs.gui.helpers.PlayerResearchCheckbox;
 import moze_intel.projecte.utils.Constants;
 import moze_intel.projecte.utils.TransmutationEMCFormatter;
 import moze_intel.projecte.utils.text.PELang;
@@ -23,6 +24,26 @@ public abstract class AbstractCondenserScreen<T extends CondenserContainer> exte
 	}
 
 	protected abstract ResourceLocation getTexture();
+
+	@Override
+	public void init() {
+		super.init();
+
+		addRenderableWidget(new PlayerResearchCheckbox(
+			this,
+			leftPos + 230,
+			topPos + 4,
+			20,
+			20,
+
+			menu.hasAssignedPlayerForResearch(),
+			(checkbox, isChecked) -> {
+				// on press
+				menu.onAssignCurrentPlayerToPEContainer(isChecked);
+			},
+			checkbox -> menu.getTooltipComponents()
+		));
+	}
 
 	@Override
 	protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int x, int y) {

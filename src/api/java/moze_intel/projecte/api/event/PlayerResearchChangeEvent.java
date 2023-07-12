@@ -26,7 +26,7 @@ public class PlayerResearchChangeEvent extends Event {
 	}
 
 	/**
-	 * @return The player UUID whose knowledge changed. The associated player may or may not be logged in when this event fires.
+	 * @return The player UUID whose research changed. The associated player may or may not be logged in when this event fires.
 	 */
 	@NotNull
 	public UUID getPlayerUUID() {

@@ -197,6 +197,9 @@ public enum PELang implements ILangEntry {
 	RESEARCH_RESULT("research", "result"),
 	RESEARCH_RESULT_MAX("research", "result.max"),
 	RESEARCH_RESULT_FAILURE("research", "result.failure"),
+	// Condenser GUI
+	CONDENSER_USE_PLAYER_RESEARCH_TOOLTIP("condenser", "tooltip.use.player.research"),
+	CONDENSER_USING_PLAYER_RESEARCH_TOOLTIP("condenser", "tooltip.using.player.research"),
 	//Advancements
 	ADVANCEMENTS_PROJECTE_DESCRIPTION("advancements", "description"),
 	ADVANCEMENTS_PHILO_STONE("advancements", "philo_stone"),

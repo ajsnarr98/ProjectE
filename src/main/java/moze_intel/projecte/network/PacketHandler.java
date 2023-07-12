@@ -24,6 +24,7 @@ import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncInpu
 import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncPKT;
 import moze_intel.projecte.network.packets.to_client.knowledge.KnowledgeSyncResearchChangePKT;
 import moze_intel.projecte.network.packets.to_client.knowledge.UpdateTransmutationTargetsPkt;
+import moze_intel.projecte.network.packets.to_server.AssignPlayerToPEContainerPKT;
 import moze_intel.projecte.network.packets.to_server.ConsumeResearchItemsPKT;
 import moze_intel.projecte.network.packets.to_server.KeyPressPKT;
 import moze_intel.projecte.network.packets.to_server.LeftClickArchangelPKT;
@@ -55,6 +56,7 @@ public final class PacketHandler {
 		registerClientToServer(SearchUpdatePKT.class, SearchUpdatePKT::decode);
 		registerClientToServer(UpdateGemModePKT.class, UpdateGemModePKT::decode);
 		registerClientToServer(ConsumeResearchItemsPKT.class, ConsumeResearchItemsPKT::decode);
+		registerClientToServer(AssignPlayerToPEContainerPKT.class, AssignPlayerToPEContainerPKT::decode);
 
 		//Server to client messages
 		registerServerToClient(CooldownResetPKT.class, CooldownResetPKT::decode);

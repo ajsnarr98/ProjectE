@@ -1,9 +1,14 @@
 package moze_intel.projecte.events;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
 import moze_intel.projecte.PECore;
 import moze_intel.projecte.api.capabilities.IAlchBagProvider;
 import moze_intel.projecte.api.capabilities.PECapabilities;
+import moze_intel.projecte.api.event.PlayerResearchChangeEvent;
 import moze_intel.projecte.capability.managing.BasicCapabilityResolver;
 import moze_intel.projecte.gameObjs.container.ResearchContainer;
 import moze_intel.projecte.gameObjs.items.AlchemicalBag;
@@ -52,6 +57,35 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 
 @Mod.EventBusSubscriber(modid = PECore.MODID)
 public class PlayerEvents {
+
+	private static List<WeakReference<PlayerResearchChangeListener>> weakResearchEventListeners = new ArrayList<>();
+
+	private static void cleanResearchChangeListenerReferences() {
+		// remove any references that have been garbage collected
+		weakResearchEventListeners.removeIf(ref -> ref.get() == null);
+	}
+
+	public static void addWeakReferencePlayerResearchChangeListener(PlayerResearchChangeListener listener) {
+		cleanResearchChangeListenerReferences();
+		weakResearchEventListeners.add(new WeakReference<>(listener));
+	}
+
+	public interface PlayerResearchChangeListener {
+		void onResearchChangeEvent(PlayerResearchChangeEvent event);
+	}
+
+	@SubscribeEvent
+	public static void onPlayerResearchChangeEvent(PlayerResearchChangeEvent event) {
+		// update listeners
+		cleanResearchChangeListenerReferences();
+		weakResearchEventListeners
+			.forEach(ref -> {
+				PlayerResearchChangeListener listener = ref.get();
+				if (listener != null) {
+					listener.onResearchChangeEvent(event);
+				}
+			});
+	}
 
 	// On death or return from end, copy the capability data
 	@SubscribeEvent
@@ -121,6 +155,20 @@ public class PlayerEvents {
 		player.getCapability(PECapabilities.ALCH_BAG_CAPABILITY).ifPresent(c -> c.sync(null, player));
 
 		PECore.debugLog("Sent knowledge and bag data to {}", player.getName());
+	}
+
+	@SubscribeEvent
+	public static void onPlayerContainerClose(PlayerContainerEvent.Close evt) {
+		if (evt.getContainer() instanceof ResearchContainer container) {
+			container.researchInventory.onCloseContainer();
+		}
+	}
+
+	@SubscribeEvent
+	public static void onPlayerDisconnect(PlayerEvent.PlayerLoggedOutEvent evt) {
+		if (evt.getPlayer().containerMenu instanceof ResearchContainer container) {
+			container.researchInventory.onCloseContainer();
+		}
 	}
 
 	@SubscribeEvent
@@ -208,19 +256,5 @@ public class PlayerEvents {
 			return Math.max(armorItem.getFullSetBaseReduction(), armorItem.getMaxDamageAbsorb(type, source) / damage) * armorItem.getPieceEffectiveness(type);
 		}
 		return 0;
-	}
-
-	@SubscribeEvent
-	public static void onPlayerContainerClose(PlayerContainerEvent.Close evt) {
-		if (evt.getContainer() instanceof ResearchContainer container) {
-			container.researchInventory.onCloseContainer();
-		}
-	}
-
-	@SubscribeEvent
-	public static void onPlayerDisconnect(PlayerEvent.PlayerLoggedOutEvent evt) {
-		if (evt.getPlayer().containerMenu instanceof ResearchContainer container) {
-			container.researchInventory.onCloseContainer();
-		}
 	}
 }

@@ -190,7 +190,7 @@ public final class EMCHelper {
 			// then if the slot is already taken by an existing fragment (where existing fragments
 			// fill from the first slot onwards), research fails, if we choose an empty slot,
 			// we get a new fragment
-			if (rand.nextDouble() * maxFragments > (existingFragments + newFragments)) {
+			if (rand.nextDouble() * maxFragments >= (existingFragments + newFragments)) {
 				newFragments++;
 			}
 			consumed++;
