@@ -134,6 +134,15 @@ public interface IKnowledgeProvider extends INBTSerializable<CompoundTag> {
 	boolean setResearchFragments(@NotNull ItemInfo item, int numFragments);
 
 	/**
+	 * Used when sharing research from one knowledge provider to another.
+	 *
+	 * @param other the knowledge provider to get research from
+	 * @return true if any new research fragment counts increased, false
+	 *         if this call had no effect
+	 */
+	boolean updateResearchFragmentsUsing(IKnowledgeProvider other);
+
+	/**
 	 * Syncs this provider to the given player.
 	 *
 	 * @param player The player to sync to.

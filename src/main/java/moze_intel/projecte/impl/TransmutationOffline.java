@@ -149,6 +149,9 @@ public class TransmutationOffline {
 			public boolean setResearchFragments(@NotNull ItemInfo item, int numFragments) { return false; }
 
 			@Override
+			public boolean updateResearchFragmentsUsing(IKnowledgeProvider other) { return false; }
+
+			@Override
 			public void sync(@NotNull ServerPlayer player) {
 				toCopy.sync(player);
 			}

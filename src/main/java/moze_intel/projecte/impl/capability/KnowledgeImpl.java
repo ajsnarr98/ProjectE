@@ -244,6 +244,22 @@ public final class KnowledgeImpl {
 		}
 
 		@Override
+		public boolean updateResearchFragmentsUsing(IKnowledgeProvider other) {
+			boolean changesMade = false;
+			for (Map.Entry<ItemInfo, Integer> otherEntry : other.getResearchFragments().entrySet()) {
+				if (otherEntry.getValue() != null && otherEntry.getValue() > this.getResearchFragments(otherEntry.getKey())) {
+					this.researchFragments.put(otherEntry.getKey(), otherEntry.getValue());
+					changesMade = true;
+				}
+			}
+
+			if (changesMade) {
+				fireResearchChangedEvent();
+			}
+			return changesMade;
+		}
+
+		@Override
 		public void sync(@NotNull ServerPlayer player) {
 			PacketHandler.sendTo(new KnowledgeSyncPKT(serializeNBT()), player);
 		}

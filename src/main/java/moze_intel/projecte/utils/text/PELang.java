@@ -31,6 +31,12 @@ public enum PELang implements ILangEntry {
 	SHOWBAG_NOT_FOUND("command", "showbag.offline.notfound"),
 	SHOWBAG_UUID("command", "showbag.offline.uuid"),
 	SHOWBAG_NAMED("command", "showbag.named"),
+	SHARE_RESEARCH_SOURCE_WAS_NOT_PLAYER("command", "share.research.non.player.source"),
+	SHARE_RESEARCH_SENDER_KNOWLEDGE_MISSING("command", "share.research.knowledge.capability.missing.sender"),
+	SHARE_RESEARCH_RECEIVER_KNOWLEDGE_MISSING("command", "share.research.knowledge.capability.missing.receiver"),
+	SHARE_RESEARCH_SENDER_SUCCESS("command", "share.research.sender.success"),
+	SHARE_RESEARCH_SENDER_FAILED_TO_ADD_NEW_RESEARCH("command", "share.research.sender.nothing.added"),
+	SHARE_RESEARCH_RECEIVER_SUCCESS("command", "share.research.receiver.success"),
 	//Diving Rod
 	DIVINING_AVG_EMC("divining_rod", "avg_emc"),
 	DIVINING_MAX_EMC("divining_rod", "max_emc"),

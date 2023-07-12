@@ -101,7 +101,7 @@ public class CondenserBlockEntity extends EmcChestBlockEntity implements PlayerE
 	public void setAssociatedPlayerClient(@Nullable LocalPlayer player) {
 		if (player != null) {
 			this.associatedPlayer = player.getUUID();
-			this.associatedPlayerName = player.getName().getString();
+			this.associatedPlayerName = player.getDisplayName().getString();
 		} else {
 			this.associatedPlayer = null;
 			this.associatedPlayerName = "";
@@ -115,7 +115,7 @@ public class CondenserBlockEntity extends EmcChestBlockEntity implements PlayerE
 	public void setAssociatedPlayerServer(@NotNull ServerPlayer player, boolean isNowAssociated) {
 		if (isNowAssociated) {
 			this.associatedPlayer = player.getUUID();
-			this.associatedPlayerName = player.getName().getString();
+			this.associatedPlayerName = player.getDisplayName().getString();
 		} else {
 			this.associatedPlayer = null;
 			this.associatedPlayerName = "";
